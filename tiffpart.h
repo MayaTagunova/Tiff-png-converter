@@ -1,9 +1,5 @@
 #include <stdio.h>
-#include <string.h>
-#include <stddef.h>
 #include <stdint.h>
-#include <assert.h>
-#include <tiffio.h>
 
 #ifndef TIFFPART_H
 #define TIFFPART_H

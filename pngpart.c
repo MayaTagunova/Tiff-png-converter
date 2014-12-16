@@ -1,17 +1,12 @@
-#include "pngpart.h"
 #include <stdio.h>
 #include <string.h>
-#include <stddef.h>
 #include <stdint.h>
 #include <assert.h>
 #include <png.h>
-//#include <zlib.h>
+#include "pngpart.h"
 
 int pngGetDataSize(const char *fileName, size_t *size)
 {
-#ifdef DEBUG
-    printf("pngGetDataSize...\n");
-#endif
     assert(fileName != NULL);
     assert(size != NULL);
 
@@ -32,9 +27,6 @@ int pngGetDataSize(const char *fileName, size_t *size)
 
 int pngReadData(const char *fileName, uint32_t *buffer, size_t *size)
 {
-#ifdef DEBUG
-    printf("pngReadData...\n");
-#endif
     assert(fileName != NULL);
     assert(buffer != NULL);
     assert(size != NULL);

@@ -1,24 +1,19 @@
-#include "tiffpart.h"
 #include <stdio.h>
-#include <string.h>
-#include <stddef.h>
 #include <stdint.h>
 #include <assert.h>
 #include <tiffio.h>
 #include <tiff.h>
+#include "tiffpart.h"
 
 int tiffGetDataSize(const char *fileName, size_t *size)
 {
-#ifdef DEBUG
-    printf("tiffGetDataSize...\n");
-#endif
     assert(fileName != NULL);
     assert(size != NULL);
 
     TIFF *image = TIFFOpen(fileName, "r");
 
     if (!image) {
-        printf("tiffGetDataSize: TIFFOpen failed.\n");
+        printf("TIFFOpen failed.\n");
         return 1;
     }
 
@@ -36,9 +31,6 @@ int tiffGetDataSize(const char *fileName, size_t *size)
 
 int tiffReadData(const char *fileName, uint32_t *buffer, size_t *size)
 {
-#ifdef DEBUG
-    printf("tiffReadData...\n");
-#endif
     assert(fileName != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -46,7 +38,7 @@ int tiffReadData(const char *fileName, uint32_t *buffer, size_t *size)
     TIFF *image;
 
     if (!(image = TIFFOpen(fileName, "r"))) {
-        printf("tiffReadData: TIFFOpen failed.\n");
+        printf("TIFFOpen failed.\n");
         return 1;
     }
 
@@ -56,14 +48,14 @@ int tiffReadData(const char *fileName, uint32_t *buffer, size_t *size)
     TIFFGetField(image, TIFFTAG_IMAGELENGTH, &size2[1]);
 
     if ((size2[0] != size[0]) || (size2[1] != size[1])) {
-        printf("tiffReadData: size does not match.\n");
+        printf("Size does not match.\n");
         TIFFClose(image);
         return 1;
     }
 
     if (!(TIFFReadRGBAImageOriented(image, size[0], size[1],
                                     buffer, ORIENTATION_TOPLEFT, 0))) {
-        printf("tiffReadData: TIFFReadRGBAImage failed.\n");
+        printf("TIFFReadRGBAImage failed.\n");
         TIFFClose(image);
         return 1;
     }
@@ -74,9 +66,6 @@ int tiffReadData(const char *fileName, uint32_t *buffer, size_t *size)
 
 int tiffWriteData(const char *fileName, uint32_t *buffer, size_t *size)
 {
-#ifdef DEBUG
-    printf("tiffWriteData...\n");
-#endif
     assert(fileName != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -84,7 +73,7 @@ int tiffWriteData(const char *fileName, uint32_t *buffer, size_t *size)
     TIFF *image;
 
     if (!(image = TIFFOpen(fileName, "w"))) {
-        printf("tiffWriteData: TIFFOpen failed.\n");
+        printf("TIFFOpen failed.\n");
         return 1;
     }
 
@@ -101,7 +90,7 @@ int tiffWriteData(const char *fileName, uint32_t *buffer, size_t *size)
     TIFFSetField(image, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
 
     if ((TIFFWriteEncodedStrip(image, 0, buffer, size[0] * size[1] * sizeof(uint32_t))) == -1) {
-        printf("tiffWriteData: TIFFWriteRawTile failed.\n");
+        printf("TIFFWriteRawTile failed.\n");
         TIFFClose(image);
         return 1;
     }

@@ -1,16 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "pngpart.h"
 #include "tiffpart.h"
 
 typedef enum fileType {TYPE_PNG, TYPE_TIFF} fileType;
 
-int convert(const char *inputFileName, const char *outputFileName, fileType inputType, fileType outputType)
+int convert(const char *inputFileName,
+            const char *outputFileName,
+            fileType inputType,
+            fileType outputType)
 {
-#ifdef DEBUG
-    printf("convert...\n");
-#endif
     assert(inputFileName != NULL);
     assert(outputFileName != NULL);
 
@@ -46,20 +47,22 @@ int convert(const char *inputFileName, const char *outputFileName, fileType inpu
     }
 
     if (getDataSize(inputFileName, size)) {
-        printf("convert: getDataSize failed");
+        printf("Size request failed.\n");
         return 1;
     }
-    if ((buffer = (uint32_t *)malloc(size[0] * size[1] * sizeof(uint32_t))) == NULL) {
-        printf("Memory allocation failed");
+    if ((buffer = (uint32_t *)malloc(size[0] *
+                                     size[1] *
+                                     sizeof(uint32_t))) == NULL) {
+        printf("Memory allocation failed.\n");
         return 1;
     }
     if (readData(inputFileName, buffer, size)) {
-        printf("convert: readData failed");
+        printf("Reading failed.\n");
         free(buffer);
         return 1;
     }
     if (writeData(outputFileName, buffer, size)) {
-        printf("convert: writeData failed");
+        printf("Writing failed.\n");
         free(buffer);
         return 1;
     }
